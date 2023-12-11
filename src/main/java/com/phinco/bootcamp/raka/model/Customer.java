@@ -5,21 +5,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name="accounts")
+@Table(name="customers")
 @Entity
-public class Account {
+public class Customer {
     @Id
     String id;
     String name;
-    String type;
-    String customerId;
-    Long amount;
+    LocalDate birthDate;
     boolean status;
     Timestamp createdDate;
     Timestamp updatedDate;

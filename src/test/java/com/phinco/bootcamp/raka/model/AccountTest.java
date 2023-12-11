@@ -1,54 +1,37 @@
 package com.phinco.bootcamp.raka.model;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+
+
 import org.junit.jupiter.api.Test;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class AccountTest {
-    static Account account;
-    @BeforeAll
-    static void setUp() {
-        account = new Account();
-        account.setAmount(10.0);
-        account.setId(1);
-        account.setName("Raka Aditya");
-    }
+
+
+class AccountTest {
 
     @Test
-    void TestGetAmount() {
-        assertEquals(10.0, account.getAmount());
-    }
+    public void testAll() {
+        Account account = new Account();
+        account.setId("1");
+        account.setName("raka");
+        account.setType("pembeli");
+        account.setAmount(50L);
+        account.setCustomerId("1");
+        account.setStatus(true);
+        account.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        account.setUpdatedDate(null);
 
-    @Test
-    void TestGetId() {
-        assertEquals(1, account.getId());
-    }
+        assertThat(account.getId()).isEqualTo("1");
+        assertThat(account.getName()).isEqualTo("raka");
+        assertThat(account.getType()).isEqualTo("pembeli");
+        assertThat(account.getAmount()).isEqualTo(50L);
+        assertThat(account.getCustomerId()).isEqualTo("1");
+        assertThat(account.status).isTrue();
+        assertThat(account.getUpdatedDate()).isNull();
 
-    @Test
-    void TestGetName() {
-        assertEquals("Raka Aditya", account.getName());
-    }
 
-    @Test
-    void TestSetName() {
-        assertTrue(true);
-    }
-
-    @Test
-    void TestSetId() {
-        assertTrue(true);
-    }
-
-    @Test
-    void TestSetIdSting() {
-        assertEquals("1", account.setIdString());
-    }
-
-    @Test
-    void TestSetAmount() {
-        assertTrue(true);
     }
 }

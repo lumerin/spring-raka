@@ -1,16 +1,20 @@
 package com.phinco.bootcamp.raka.service;
 
 import com.phinco.bootcamp.raka.model.Account;
+import com.phinco.bootcamp.raka.model.AccountDto;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface AccountService {
 
-    public Optional<Account> getById(int id);
-
+    public Account getAccount(String id);
     public List<Account> getAccounts();
+    public Account saveAccount(AccountDto accountDto);
 
-    public Account save(Account account);
+    public Account updateAccount(AccountDto accountDto);
+
+    public Account patchAccount(AccountDto accountDto);
+
+    public Account deleteAccount(String id);
 }
