@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface AccountRepository extends CrudRepository<Account, String> {
-    List<Account> findByStatus(Boolean status);
-    Optional<Account> findByIdAndStatus(String id, boolean status);
 
+public interface AccountRepository {
+    public Account getAccountById(String id);
 }

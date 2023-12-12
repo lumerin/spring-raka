@@ -1,3 +1,5 @@
+USE DATABASE phincon_db;
+
 CREATE TABLE accounts (
     id VARCHAR(36) NOT NULL,
     customer_id VARCHAR(36) NOT NULL,
