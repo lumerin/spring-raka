@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
@@ -43,8 +44,6 @@ class AccountServiceTest {
 
     @BeforeEach
     public void setup() {
-        //employeeRepository = Mockito.mock(EmployeeRepository.class);
-        //employeeService = new EmployeeServiceImpl(employeeRepository);
         account = Account.builder()
                            .id("1")
                            .name("account1")
@@ -64,7 +63,7 @@ class AccountServiceTest {
     }
 
     @Test
-    public void testSaveService() throws Exception {
+    public void testSaveAccount() throws Exception {
 
         given(this.accountRepository.save(any())).willReturn(account);
         Account savedAccount = accountService.saveAccount(accountDto);
@@ -123,7 +122,7 @@ class AccountServiceTest {
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdateAccount() {
         when(accountRepository.findByIdAndStatus("1", true))
                 .thenReturn(Optional.ofNullable(account));
         when(accountRepository.save(any(Account.class))).thenReturn(account);
@@ -134,12 +133,26 @@ class AccountServiceTest {
     }
 
     @Test
-    public void testDelete() {
+    public void testPatchAccount() {
+        account.setName("updatedName");
+        account.setType("updateType");
+        accountDto.setName(account.getName());
+        accountDto.setType(account.getType());
+        when(accountRepository.findByIdAndStatus("1", true)).thenReturn(Optional.ofNullable(account));
+        when(accountRepository.save(account)).thenReturn(account);
+
+        Account updatedAccount = accountService.patchAccount(accountDto);
+
+    }
+
+    @Test
+    public void testDeleteAccount() {
+        account.setStatus(false);
 //        when(acc)
-        when(accountRepository.save(any(Account.class))).thenReturn(account);
+        Mockito.when(accountRepository.findById("1")).thenReturn(Optional.ofNullable(account));
+        Mockito.when(accountRepository.save(any())).thenReturn(account);
 
         Account savedAccount = accountService.deleteAccount("1");
-
         assertThat(savedAccount).isNotNull();
     }
 }

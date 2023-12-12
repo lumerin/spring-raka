@@ -1,28 +1,35 @@
 package com.phinco.bootcamp.raka.controller;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.phinco.bootcamp.raka.model.Account;
 import com.phinco.bootcamp.raka.model.Customer;
 import com.phinco.bootcamp.raka.model.CustomerDto;
+
 import com.phinco.bootcamp.raka.service.CustomerService;
 import org.hamcrest.Matchers;
+
 import org.junit.jupiter.api.Test;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.is;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.*;
+
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.CoreMatchers.is;
 
 @WebMvcTest(CustomerController.class)
 public class CustomerControllerTest {
@@ -37,46 +44,61 @@ public class CustomerControllerTest {
 
     @Test
     void testGetCustomer() throws Exception {
+        Customer customer = new Customer();
+        customer.setId("1");
+        customer.setName("account1");
+        customer.setBirthDate(LocalDate.of(2000, 6,27));
+        customer.setStatus(true);
+        customer.setCreatedDate(new Timestamp(Calendar.getInstance()
+                                                     .getTimeInMillis()));
 
-            Customer customer = new Customer();
-            customer.setId("1");
-            customer.setName("Customer1");
+        Mockito.when(customerService.getCustomer("1"))
+               .thenReturn(customer);
 
-            when(customerService.getCustomer("1")).thenReturn(customer);
+        mockMvc.perform(get("/bootcamp/customer/{id}", "1")
+                       .accept("application/json"))
+               .andDo(print())
+               .andExpect(jsonPath("$").isNotEmpty());
+    }
 
-            mockMvc.perform(get("/bootcamp/customer/{id}", "1")
-                           .accept("application/json"))
-                   .andDo(print())
-                   .andExpect(jsonPath("$").isNotEmpty());
+    @Test
+    public void testGetCustomerWithIdNull() throws Exception {
+
+        Mockito.when(customerService.getCustomer(null)).thenReturn(null);
+
+        mockMvc.perform(get("/bootcamp/Customers"))
+               .andDo(print())
+               .andExpect(result ->  {
+                   is(Optional.empty());
+               });
     }
 
     @Test
     public void testGetCustomerEmpty() throws Exception {
 
-        when(customerService.getCustomer(anyString())).thenReturn(null);
+        Mockito.when(customerService.getCustomer(anyString())).thenReturn(null);
 
         mockMvc.perform(get("/bootcamp/Customers"))
-                .andDo(print())
-               .andExpect(result -> {
+               .andDo(print())
+               .andExpect(result ->  {
                    is(Optional.empty());
                });
     }
 
     @Test
     void testGetCustomers() throws Exception {
+        List<Customer> customers = new ArrayList<>();
+        Customer customer1 = new Customer();
+        Customer customer2 = new Customer();
 
-        List<Customer> Customers = new ArrayList<>();
-        Customer Customer1 = new Customer();
-        Customer Customer2 = new Customer();
+        customer1.setId("1");
+        customer1.setName("account1");
+        customer2.setId("2");
+        customer2.setName("account2");
+        customers.add(customer1);
+        customers.add(customer2);
 
-        Customer1.setId("1");
-        Customer1.setName("Customer1");
-        Customer2.setId("2");
-        Customer2.setName("Customer2");
-        Customers.add(Customer1);
-        Customers.add(Customer2);
-
-        when(customerService.getCustomers()).thenReturn(Customers);
+        Mockito.when(customerService.getCustomers()).thenReturn(customers);
 
         mockMvc.perform(get("/bootcamp/customers")
                        .contentType("application/json"))
@@ -85,121 +107,117 @@ public class CustomerControllerTest {
                .andExpect(jsonPath("$[0].id",Matchers.equalTo("1")))
                .andExpect(jsonPath("$[1].id", Matchers.equalTo("2")))
                .andExpect(jsonPath("$[1]").isNotEmpty());
-
     }
 
     @Test
     public void testGetCustomersEmpty() throws Exception {
 
-        when(customerService.getCustomers()).thenReturn(Collections.emptyList());
+        Mockito.when(customerService.getCustomers()).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/bootcamp/customers"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("[]"))
-                .andDo(print());
+               .andExpect(status().isOk())
+               .andExpect(content().json("[]"))
+               .andDo(print());
 
     }
 
     @Test
-    void testSave() throws Exception {
+    void testSaveCustomer() throws Exception {
 
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setId("1");
-        customerDto.setName("customer1");
+        CustomerDto CustomerDto = new CustomerDto();
+        CustomerDto.setId("1");
+        CustomerDto.setName("Customer1");
 
         String requestBody;
-        requestBody = objectMapper.writeValueAsString(customerDto);
+        requestBody = objectMapper.writeValueAsString(CustomerDto);
 
-        Customer customer = new Customer();
-        customer.setId(customerDto.getId());
-        customer.setName(customerDto.getName());
+        Customer Customer = new Customer();
+        Customer.setId(CustomerDto.getId());
+        Customer.setName(CustomerDto.getName());
 
-        when(customerService.saveCustomer(customerDto)).thenReturn(customer);
+        Mockito.when(customerService.saveCustomer(CustomerDto)).thenReturn(Customer);
 
 
-            mockMvc.perform(post("/bootcamp/customer")
-                                        .content(requestBody)
-                                        .contentType("application/json"))
-                   .andExpect(status().isCreated())
-                   .andDo(print());
+        mockMvc.perform(post("/bootcamp/Customer")
+                       .content(requestBody)
+                       .contentType("application/json"))
+               .andExpect(status().isCreated())
+               .andDo(print());
 
     }
 
     @Test
-    void testSaveWithIdNull() throws Exception {
+    void testSaveCustomerWithIdNull() throws Exception {
 
-        CustomerDto customerDto = new CustomerDto();
+        CustomerDto CustomerDto = new CustomerDto();
 
-        customerDto.setName("customer1");
+        CustomerDto.setName("Customer1");
 
-        String requestBody = objectMapper.writeValueAsString(customerDto);
+        String requestBody = objectMapper.writeValueAsString(CustomerDto);
 
-        when(customerService.saveCustomer(customerDto)).thenReturn(null);
+        Mockito.when(customerService.saveCustomer(CustomerDto)).thenReturn(null);
 
-        mockMvc.perform(post("/bootcamp/customer")
-                                    .content(requestBody)
-                                    .contentType("application/json"))
+        mockMvc.perform(post("/bootcamp/Customer")
+                       .content(requestBody)
+                       .contentType("application/json"))
                .andExpect(status().isBadRequest())
                .andDo(print());
 
     }
 
     @Test
-    void testPatch() throws Exception {
+    void testPatchCustomer() throws Exception {
 
-        CustomerDto customerDto = new CustomerDto();
-        Customer customer = new Customer();
+        CustomerDto CustomerDto = new CustomerDto();
+        Customer Customer = new Customer();
         String requestBody;
-        customerDto.setId("1");
-        customerDto.setName("customer2");
+        CustomerDto.setId("1");
+        CustomerDto.setName("Customer2");
 
-        requestBody = objectMapper.writeValueAsString(customerDto);
-        customer.setId(customerDto.getId());
-        customer.setName(customerDto.getName());
+        requestBody = objectMapper.writeValueAsString(CustomerDto);
+        Customer.setId(CustomerDto.getId());
+        Customer.setName(CustomerDto.getName());
 
-        when(customerService.updateCustomer(customerDto)).thenReturn(customer);
+        Mockito.when(customerService.updateCustomer(CustomerDto)).thenReturn(Customer);
 
-        mockMvc.perform(put("/bootcamp/customer")
+        mockMvc.perform(put("/bootcamp/Customer")
                        .content(requestBody)
                        .contentType("application/json"))
-               .andExpect(jsonPath("$.name",Matchers.equalTo("customer2")))
+               .andExpect(jsonPath("$.name",Matchers.equalTo("Customer2")))
                .andExpect(status().isOk())
                .andDo(print());
 
     }
 
     @Test
-    void testPut() throws Exception {
+    void testPutCustomer() throws Exception {
 
-        CustomerDto customerDto = new CustomerDto();
-        Customer customer = new Customer();
+        CustomerDto CustomerDto = new CustomerDto();
+        Customer Customer = new Customer();
         String requestBody;
-        customerDto.setId("1");
-        customerDto.setName("account2");
+        CustomerDto.setId("1");
+        CustomerDto.setName("Customer2");
 
-        requestBody = objectMapper.writeValueAsString(customerDto);
-        customer.setId(customerDto.getId());
-        customer.setName(customerDto.getName());
+        requestBody = objectMapper.writeValueAsString(CustomerDto);
+        Customer.setId(CustomerDto.getId());
+        Customer.setName(CustomerDto.getName());
 
-        Mockito.when(customerService.updateCustomer(customerDto)).thenReturn(customer);
+        Mockito.when(customerService.patchCustomer(CustomerDto)).thenReturn(Customer);
 
-        mockMvc.perform(patch("/bootcamp/customer")
+        mockMvc.perform(patch("/bootcamp/Customer")
                        .content(requestBody)
                        .contentType("application/json"))
-               .andExpect(jsonPath("$.name",Matchers.equalTo("account2")))
+               .andExpect(jsonPath("$.name",Matchers.equalTo("Customer2")))
                .andExpect(status().isOk())
                .andDo(print());
 
     }
 
     @Test
-    void testDelete() throws Exception {
-        CustomerDto customerDto  = new CustomerDto();
-        customerDto.setId("1");
-        customerDto.setName("account1");
-        when(customerService.deleteCustomer("1")).thenReturn(null);
+    void testDeleteCustomer() throws Exception {
+        Mockito.when(customerService.deleteCustomer("1")).thenReturn(null);
 
-        mockMvc.perform(delete("/bootcamp/customer/{id}"))
+        mockMvc.perform(delete("/bootcamp/Customer/1"))
                .andExpect(status().isOk());
 
     }

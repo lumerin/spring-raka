@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-
+import java.sql.Timestamp;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,17 +42,32 @@ public class AccountControllerTest {
 
     @Test
     void testGetAccount() throws Exception {
-
             Account account = new Account();
             account.setId("1");
             account.setName("account1");
-
+            account.setType("penjual");
+            account.setCustomerId("1");
+            account.setAmount(15L);
+            account.setStatus(true);
+            account.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             Mockito.when(accountService.getAccount("1")).thenReturn(account);
 
             mockMvc.perform(get("/bootcamp/account/{id}", "1")
                            .accept("application/json"))
                    .andDo(print())
                    .andExpect(jsonPath("$").isNotEmpty());
+    }
+
+    @Test
+    public void testGetAccountWithIdNull() throws Exception {
+
+        Mockito.when(accountService.getAccount(anyString())).thenReturn(null);
+
+        mockMvc.perform(get("/bootcamp/accounts"))
+               .andDo(print())
+               .andExpect(result ->  {
+                   is(Optional.empty());
+               });
     }
 
     @Test
@@ -106,7 +121,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    void testSave() throws Exception {
+    void testSaveAccount() throws Exception {
 
         AccountDto accountDto = new AccountDto();
         accountDto.setId("1");
@@ -150,7 +165,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    void testPatch() throws Exception {
+    void testPatchAccount() throws Exception {
 
         AccountDto accountDto = new AccountDto();
         Account account = new Account();
@@ -174,7 +189,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    void testPut() throws Exception {
+    void testPutAccount() throws Exception {
 
         AccountDto accountDto = new AccountDto();
         Account account = new Account();
@@ -198,10 +213,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    void testDelete() throws Exception {
-        AccountDto accountDto  = new AccountDto();
-        accountDto.setId("1");
-        accountDto.setName("account1");
+    void testDeleteAccount() throws Exception {
         Mockito.when(accountService.deleteAccount("1")).thenReturn(null);
 
         mockMvc.perform(delete("/bootcamp/account/1"))

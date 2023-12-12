@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
@@ -35,30 +36,33 @@ class CustomerServiceTest {
     @InjectMocks
     private CustomerServiceImpl customerService;
     private Customer customer;
-    private CustomerDto customerDto = new CustomerDto();
+    private CustomerDto customerDto;
 
     @BeforeEach
     public void setup() {
-        //employeeRepository = Mockito.mock(EmployeeRepository.class);
-        //employeeService = new EmployeeServiceImpl(employeeRepository);
-
         customer = Customer.builder()
-                           .id("1")
-                           .name("customer1")
-                           .birthDate(LocalDate.now())
-                           .status(true)
-                           .createdDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
-                           .updatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
-                           .build();
+                         .id("1")
+                         .name("Customer1")
+                         .birthDate(LocalDate.of(2000, 6, 27))
+                         .status(true)
+                         .createdDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
+                         .updatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
+                         .build();
 
         customerDto.setId(customer.getId());
         customerDto.setName(customer.getName());
+        //belom selesai dari sini kebawah
     }
 
     @Test
-    public void testSaveService() throws Exception {
+    public void testSaveCustomer() throws Exception {
 
-
+        given(this.customerRepository.save(any())).willReturn(customer);
+        Customer savedCustomer = customerService.saveCustomer(customerDto);
+        assertThat(savedCustomer).isNotNull();
+        assertThat(savedCustomer.getId()).isEqualTo("1");
+        assertThat(savedCustomer.getName()).isEqualTo("Customer1");
+        assertThat(savedCustomer.isStatus()).isEqualTo(true);
 
     }
 
@@ -68,7 +72,7 @@ class CustomerServiceTest {
         Customer customer1;
         customer1 = Customer.builder()
                           .id("2")
-                          .name("customer2")
+                          .name("Customer2")
                           .status(true)
                           .createdDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
                           .updatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
@@ -78,10 +82,9 @@ class CustomerServiceTest {
         customerDto1.setId(customer1.getId());
         customerDto1.setName(customer1.getName());
 
-        given(customerRepository.findByStatus(any())).willReturn((List.<Customer>of(customer, customer1)));
+        given(customerRepository.findByStatus(any())).willReturn(List.of(customer,customer1));
 
-        List<Customer> customerList;
-        customerList = customerService.getCustomers();
+        List<Customer> customerList = customerService.getCustomers();
 
         assertThat(customerList).isNotNull();
         assertThat(customerList.size()).isEqualTo(2);
@@ -104,7 +107,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdateCustomer() {
         when(customerRepository.findByIdAndStatus("1", true))
                 .thenReturn(Optional.ofNullable(customer));
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
@@ -115,17 +118,25 @@ class CustomerServiceTest {
     }
 
     @Test
-    public void testDelete() {
-//        when(customerRepository.)
+    public void testPatchCustomer() {
+        customer.setName("updatedName");
+        customerDto.setName(customer.getName());
+        when(customerRepository.findByIdAndStatus("1", true)).thenReturn(Optional.ofNullable(customer));
         when(customerRepository.save(customer)).thenReturn(customer);
 
-        Customer savedCustomer = customerService.deleteCustomer("1");
-
-        assertThat(savedCustomer).isNotNull();
+        Customer updatedCustomer = customerService.patchCustomer(customerDto);
+        //belum dari sini kebawah
     }
 
+    @Test
+    public void testDeleteCustomer() {
+        customer.setStatus(false);
+//        when(acc)
+        Mockito.when(customerRepository.findById("1")).thenReturn(Optional.ofNullable(customer));
+        Mockito.when(customerRepository.save(any())).thenReturn(customer);
 
-
-
+        Customer savedCustomer = customerService.deleteCustomer("1");
+        assertThat(savedCustomer).isNotNull();
+    }
 }
 

@@ -5,9 +5,7 @@ import com.phinco.bootcamp.raka.model.AccountDto;
 
 import java.util.List;
 
-
 public interface AccountService {
-
     public Account getAccount(String id);
     public List<Account> getAccounts();
     public Account saveAccount(AccountDto accountDto);

@@ -3,7 +3,6 @@ package com.phinco.bootcamp.raka.model;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
@@ -12,7 +11,6 @@ import java.util.Calendar;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
 class CustomerTest {
     @Test
     public void testAll() {

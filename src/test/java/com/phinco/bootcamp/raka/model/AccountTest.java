@@ -1,37 +1,75 @@
 package com.phinco.bootcamp.raka.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.sql.Timestamp;
 
 import org.junit.jupiter.api.Test;
-import java.sql.Timestamp;
-import java.util.Calendar;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-
-
-class AccountTest {
+public class AccountTest {
 
     @Test
-    public void testAll() {
+    public void testSetId() {
         Account account = new Account();
         account.setId("1");
-        account.setName("raka");
-        account.setType("pembeli");
-        account.setAmount(50L);
-        account.setCustomerId("1");
+        assertEquals("1", account.getId());
+    }
+
+    @Test
+    public void testSetAccountId() {
+        Account account = new Account();
+
+        account.setCustomerId("account1");
+        assertEquals("account1", account.getCustomerId());
+    }
+
+    @Test
+    public void testSetName() {
+        Account account = new Account();
+
+        account.setName("Damar");
+        assertEquals("Damar", account.getName());
+    }
+
+    @Test
+    public void testSetType() {
+        Account account = new Account();
+
+        account.setType("Savings");
+        assertEquals("Savings", account.getType());
+    }
+
+    @Test
+    public void testSetStatus() {
+        Account account = new Account();
+
         account.setStatus(true);
-        account.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-        account.setUpdatedDate(null);
+        assertEquals(true, account.isStatus());
+    }
 
-        assertThat(account.getId()).isEqualTo("1");
-        assertThat(account.getName()).isEqualTo("raka");
-        assertThat(account.getType()).isEqualTo("pembeli");
-        assertThat(account.getAmount()).isEqualTo(50L);
-        assertThat(account.getCustomerId()).isEqualTo("1");
-        assertThat(account.status).isTrue();
-        assertThat(account.getUpdatedDate()).isNull();
+    @Test
+    public void testSetAmount() {
+        Account account = new Account();
 
+        account.setAmount(1000L);
+        assertEquals(Long.valueOf(1000L), account.getAmount());
+    }
 
+    @Test
+    public void testSetCreatedDate() {
+        Account account = new Account();
+
+        long currentTime = System.currentTimeMillis();
+        account.setCreatedDate(new Timestamp(currentTime));
+        assertEquals(currentTime, account.getCreatedDate().getTime());
+    }
+
+    @Test
+    public void testSetUpdatedDate() {
+        Account account = new Account();
+
+        long currentTime = System.currentTimeMillis();
+        account.setUpdatedDate(new Timestamp(currentTime));
+        assertEquals(currentTime, account.getUpdatedDate().getTime());
     }
 }

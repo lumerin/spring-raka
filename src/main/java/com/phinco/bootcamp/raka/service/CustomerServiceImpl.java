@@ -4,12 +4,14 @@ import com.phinco.bootcamp.raka.model.Customer;
 import com.phinco.bootcamp.raka.model.CustomerDto;
 import com.phinco.bootcamp.raka.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CustomerServiceImpl implements CustomerService{
     @Autowired
     CustomerRepository repository;
