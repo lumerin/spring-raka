@@ -36,22 +36,22 @@ class CustomerServiceTest {
     @InjectMocks
     private CustomerServiceImpl customerService;
     private Customer customer;
-    private CustomerDto customerDto;
+    private CustomerDto customerDto = new CustomerDto();
 
     @BeforeEach
     public void setup() {
         customer = Customer.builder()
-                         .id("1")
-                         .name("Customer1")
-                         .birthDate(LocalDate.of(2000, 6, 27))
-                         .status(true)
-                         .createdDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
-                         .updatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
-                         .build();
+                           .id("1")
+                           .name("Customer1")
+                           .birthDate(LocalDate.of(2000, 6, 27))
+                           .status(true)
+                           .createdDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
+                           .updatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
+                           .build();
 
         customerDto.setId(customer.getId());
         customerDto.setName(customer.getName());
-        //belom selesai dari sini kebawah
+        customerDto.setBirthDate(customer.getBirthDate());
     }
 
     @Test
@@ -71,16 +71,18 @@ class CustomerServiceTest {
 
         Customer customer1;
         customer1 = Customer.builder()
-                          .id("2")
-                          .name("Customer2")
-                          .status(true)
-                          .createdDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
-                          .updatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
-                          .build();
+                            .id("2")
+                            .name("Customer2")
+                            .birthDate(LocalDate.of(2000, 6, 27))
+                            .status(true)
+                            .createdDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
+                            .updatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()))
+                            .build();
 
         CustomerDto  customerDto1 = new CustomerDto();
         customerDto1.setId(customer1.getId());
         customerDto1.setName(customer1.getName());
+        customerDto1.setBirthDate(customer1.getBirthDate());
 
         given(customerRepository.findByStatus(any())).willReturn(List.of(customer,customer1));
 
@@ -125,7 +127,7 @@ class CustomerServiceTest {
         when(customerRepository.save(customer)).thenReturn(customer);
 
         Customer updatedCustomer = customerService.patchCustomer(customerDto);
-        //belum dari sini kebawah
+        //inibelom sampe bawah
     }
 
     @Test

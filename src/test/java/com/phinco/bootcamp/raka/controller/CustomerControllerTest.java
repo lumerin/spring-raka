@@ -2,7 +2,6 @@ package com.phinco.bootcamp.raka.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phinco.bootcamp.raka.model.Account;
 import com.phinco.bootcamp.raka.model.Customer;
 import com.phinco.bootcamp.raka.model.CustomerDto;
 
