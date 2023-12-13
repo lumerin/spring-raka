@@ -1,9 +1,6 @@
 package com.phinco.bootcamp.raka.service;
 
 import com.phinco.bootcamp.raka.model.Account;
-import com.phinco.bootcamp.raka.model.AccountDto;
-
-import java.util.List;
 
 public interface AccountService {
     public Account getAccountById(String id);
