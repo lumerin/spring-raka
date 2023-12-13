@@ -25,43 +25,49 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-
     @GetMapping("/bootcamp/account/{id}")
     public Account getAccount(@PathVariable("id") String id) {
-        logger.info("message log");
-        logger.info("message log {}", id);
-        logger.info("fatal", Throwable.class);
-        logger.debug("message debug", id);
-        logger.trace("message {}", id);
-        return accountService.getAccount(id);
-    }
-
-    @GetMapping("/bootcamp/accounts")
-    public List<Account> getAccounts(){
-        return accountService.getAccounts();
+        logger.info("getaccount id {}", id);
+        return accountService.getAccountById(id);
     }
 
 
-    @PostMapping("/bootcamp/account")
-    public ResponseEntity<Account> save(@Valid @RequestBody AccountDto accountDto) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("MyResponseHeader", "MyValue");
-        return new ResponseEntity<Account>(accountService.saveAccount(accountDto), responseHeaders, HttpStatus.CREATED);
-    }
-
-    @PatchMapping("/bootcamp/account")
-    public ResponseEntity<Account> patchAccount(@RequestBody AccountDto accountDto) {
-        return new ResponseEntity<Account>(accountService.patchAccount(accountDto), HttpStatus.OK);
-    }
-
-    @PutMapping("/bootcamp/account")
-    public ResponseEntity<Account> updateAccount(@RequestBody AccountDto accountDto) {
-        return new ResponseEntity<Account>(accountService.updateAccount(accountDto), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/bootcamp/account/{id}")
-    public ResponseEntity<String> deleteAccount(@PathVariable("id") String id) {
-        accountService.deleteAccount(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @GetMapping("/bootcamp/account/{id}")
+//    public Account getAccount(@PathVariable("id") String id) {
+//        logger.info("message log");
+//        logger.info("message log {}", id);
+//        logger.info("fatal", Throwable.class);
+//        logger.debug("message debug", id);
+//        logger.trace("message {}", id);
+//        return accountService.getAccount(id);
+//    }
+//
+//    @GetMapping("/bootcamp/accounts")
+//    public List<Account> getAccounts(){
+//        return accountService.getAccounts();
+//    }
+//
+//
+//    @PostMapping("/bootcamp/account")
+//    public ResponseEntity<Account> save(@Valid @RequestBody AccountDto accountDto) {
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.set("MyResponseHeader", "MyValue");
+//        return new ResponseEntity<Account>(accountService.saveAccount(accountDto), responseHeaders, HttpStatus.CREATED);
+//    }
+//
+//    @PatchMapping("/bootcamp/account")
+//    public ResponseEntity<Account> patchAccount(@RequestBody AccountDto accountDto) {
+//        return new ResponseEntity<Account>(accountService.patchAccount(accountDto), HttpStatus.OK);
+//    }
+//
+//    @PutMapping("/bootcamp/account")
+//    public ResponseEntity<Account> updateAccount(@RequestBody AccountDto accountDto) {
+//        return new ResponseEntity<Account>(accountService.updateAccount(accountDto), HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping("/bootcamp/account/{id}")
+//    public ResponseEntity<String> deleteAccount(@PathVariable("id") String id) {
+//        accountService.deleteAccount(id);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }
