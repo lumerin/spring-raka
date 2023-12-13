@@ -26,7 +26,7 @@ public class AccountController {
     AccountService accountService;
 
     @GetMapping("/bootcamp/account/{id}")
-    public Account getAccount(@PathVariable("id") String id) {
+    public Account getAccount(@PathVariable String id) {
         logger.info("getaccount id {}", id);
         return accountService.getAccountById(id);
     }
