@@ -12,6 +12,6 @@ public class AccountRepositoryImpl implements AccountRepository {
     @Override
     public Account getAccountById(String id) {
         String sql = "SELECT * FROM ACCOUNTS WHERE ID = ";
-        jdbcTemplate.queryForObject(sql, Account.class, id);
+        return jdbcTemplate.queryForObject(sql, Account.class, id);
     }
 }
