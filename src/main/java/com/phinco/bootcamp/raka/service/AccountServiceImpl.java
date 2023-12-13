@@ -1,22 +1,33 @@
-//package com.phinco.bootcamp.raka.service;
-//
-//import com.phinco.bootcamp.raka.model.Account;
-//import com.phinco.bootcamp.raka.model.AccountDto;
-//import com.phinco.bootcamp.raka.repository.AccountRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import java.sql.Timestamp;
-//import java.util.Calendar;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Service
-//public class AccountServiceImpl implements AccountService {
-//
-//    @Autowired
-//    AccountRepository repository;
-//
+package com.phinco.bootcamp.raka.service;
+
+import com.phinco.bootcamp.raka.model.Account;
+import com.phinco.bootcamp.raka.model.AccountDto;
+import com.phinco.bootcamp.raka.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class AccountServiceImpl implements AccountService {
+    public AccountServiceImpl(AccountRepository repository) {
+        this.repository = repository;
+    }
+
+    @Autowired
+    AccountRepository repository;
+    @Override
+    public Account getAccountById(String id) {
+        Account acc = repository.getAccountById(id);
+        if(acc != null) {
+            return acc;
+        }
+        return new Account();
+    }
+
 //    @Override
 //    public Account getAccount(String id) {
 //        Optional<Account> acc = repository.findByIdAndStatus(id, true);
@@ -99,4 +110,4 @@
 //        return new Account();
 //    }
 //
-//}
+}
