@@ -4,6 +4,10 @@ package com.phinco.bootcamp.raka.controller;
 import com.phinco.bootcamp.raka.model.Account;
 import com.phinco.bootcamp.raka.model.AccountDto;
 import com.phinco.bootcamp.raka.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
+@Tag(name = " ACCOUNT API")
 public class AccountController {
 //    Logger logger = LoggerFactory.getLogger(AccountController.class);
     Logger logger = getLogger(AccountController.class);
@@ -25,6 +30,11 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
+    @Operation(summary = "Get Account By Id", description = "API to return 1")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS"),
+            @ApiResponse(responseCode = "404", description = "Not Found - The Product was not found")
+    })
     @GetMapping("/bootcamp/account/{id}")
     public Account getAccount(@PathVariable String id) {
         logger.info("getaccount id {}", id);
@@ -41,7 +51,7 @@ public class AccountController {
 //        logger.trace("message {}", id);
 //        return accountService.getAccount(id);
 //    }
-//
+
 //    @GetMapping("/bootcamp/accounts")
 //    public List<Account> getAccounts(){
 //        return accountService.getAccounts();

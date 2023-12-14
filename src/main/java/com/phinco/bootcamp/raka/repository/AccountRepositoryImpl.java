@@ -40,18 +40,18 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public List<Account> getAllAccount() {
-        String sql = "SELECT * FROM accounts";
-        List<Account> account = jdbcTemplate.queryForObject(sql, new AccountRowMapper(), new Object[]{} );
-        logger.info("getAllAccount {}");
-        return  account;
+//        String sql = "SELECT * FROM accounts";
+//        List<Account> account = jdbcTemplate.queryForObject(sql, new AccountRowMapper(), new Object[]{} );
+//        logger.info("getAllAccount {}");
+        return  null;
     }
 
     @Override
     public Account createAccount(Account account) {
-        String sql = "SELECT * FROM accounts";
-        List<Account> account = jdbcTemplate.query(sql);
-        logger.info("getAllAccount {}");
-        return  account;
+//        String sql = "SELECT * FROM accounts";
+//        List<Account> account = jdbcTemplate.query(sql);
+//        logger.info("getAllAccount {}");
+        return  null;
     }
 
     @Override
